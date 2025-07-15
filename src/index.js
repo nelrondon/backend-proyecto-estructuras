@@ -5,11 +5,13 @@ import cookieParser from "cookie-parser";
 
 import userRoutes from "./routes/auth.routes.js";
 import propertyRoutes from "./routes/property.routes.js";
+import cors from "cors";
 
 const app = express();
 
 app.disable("x-powered-by");
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
