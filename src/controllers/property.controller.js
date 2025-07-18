@@ -14,9 +14,8 @@ export class PropertyController {
   }
   static async getByID(req, res) {
     const { id } = req.params;
-    const property = await PropiertyModel.getById(id);
-
     try {
+      const property = await PropiertyModel.getById(id);
       res.status(200).json({ property });
     } catch (e) {
       res.status(500).json({ error: e.message });

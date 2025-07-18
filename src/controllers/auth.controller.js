@@ -1,6 +1,8 @@
 import { validateUser, validatePartialUser } from "../schemas/user.schema.js";
 import { UserModel } from "../models/auth.model.js";
 
+import { createAccessToken } from "../libs/jwt.js";
+
 export class AuthController {
   static async get(req, res) {
     const { id } = req.user;
@@ -41,7 +43,7 @@ export class AuthController {
   }
 
   static async register(req, res) {
-    const { name, email, phone, role, username, password } = req.body;
+    const { name, email, phone, username, password } = req.body;
 
     const result = validateUser(req.body);
 
@@ -51,9 +53,16 @@ export class AuthController {
     }
 
     try {
-      const token = await UserModel.register(req.body);
+      const user = await UserModel.register(req.body);
+      const token = await createAccessToken({ id: user.id });
       res.cookie("token", token);
-      res.json({ message: "Usuario creado satisfactoriamente" });
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        last_login: user.last_login,
+      });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }

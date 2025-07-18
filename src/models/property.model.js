@@ -12,7 +12,7 @@ export class PropiertyModel {
 
       return propierties.rows;
     } catch (e) {
-      throw new Error(`Error al obtener las propiedades: ${e.message}`);
+      throw new Error(e.message);
     }
   }
 
@@ -23,12 +23,12 @@ export class PropiertyModel {
         [id]
       );
       if (propierties.rows.length === 0) {
-        throw new Error("Esta propiedad no existe");
+        throw new Error("Propiedad no encontrada en la base de datos");
       }
 
       return propierties.rows[0];
     } catch (e) {
-      throw new Error(`Error al obtener las propiedades: ${e.message}`);
+      throw new Error(e.message);
     }
   }
 
@@ -44,7 +44,7 @@ export class PropiertyModel {
 
       return propierties.rows;
     } catch (e) {
-      throw new Error(`Error al obtener las propiedades: ${e.message}`);
+      throw new Error(e.message);
     }
   }
 
@@ -60,7 +60,7 @@ export class PropiertyModel {
 
       return propierties.rows;
     } catch (e) {
-      throw new Error(`Error al obtener las propiedades: ${e.message}`);
+      throw new Error(e.message);
     }
   }
 

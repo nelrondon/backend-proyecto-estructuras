@@ -3,8 +3,6 @@ import bcrypt from "bcrypt";
 import { SALT_ROUNDS } from "../config.js";
 import { randomUUID } from "node:crypto";
 
-import { createAccessToken } from "../libs/jwt.js";
-
 export class UserModel {
   static find = async (id) => {
     const user = await db.execute(`SELECT * FROM users WHERE id = ?`, [id]);
@@ -36,9 +34,12 @@ export class UserModel {
       throw new Error(`Error al registrar el usuario: ${e.message}`);
     }
 
-    const token = createAccessToken({ id });
+    const newUser = {
+      id,
+      ...data,
+    };
 
-    return token;
+    return newUser;
   };
 
   static login = async (data) => {
