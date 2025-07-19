@@ -36,7 +36,11 @@ export class AuthController {
     try {
       const user = await UserModel.login({ username, password });
       const token = await createAccessToken({ id: user.id });
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
       res.status(200).json({
         id: user.id,
         name: user.name,
@@ -63,7 +67,11 @@ export class AuthController {
     try {
       const user = await UserModel.register(req.body);
       const token = await createAccessToken({ id: user.id });
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      });
       res.json({
         id: user.id,
         username: user.username,
