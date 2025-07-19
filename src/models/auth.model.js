@@ -53,7 +53,7 @@ export class UserModel {
       throw new Error("Usuario no encontrado");
     }
 
-    const { id } = user.rows[0];
+    const { id, name, email, phone, last_login } = user.rows[0];
 
     const isPasswordValid = await bcrypt.compare(
       password,
@@ -61,7 +61,7 @@ export class UserModel {
     );
 
     if (!isPasswordValid) {
-      throw new Error("Contraseña incorrecta");
+      throw new Error("Usuario o Contraseña incorrecta");
     }
 
     try {
@@ -73,7 +73,12 @@ export class UserModel {
       throw new Error("Ha ocurrido un error");
     }
 
-    const token = createAccessToken({ id });
-    return token;
+    return {
+      id,
+      name,
+      email,
+      phone,
+      last_login,
+    };
   };
 }

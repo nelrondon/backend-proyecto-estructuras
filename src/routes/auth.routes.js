@@ -10,4 +10,6 @@ router.post("/login", AuthController.login);
 router.post("/logout", AuthController.logout);
 router.post("/register", AuthController.register);
 
+router.get("/verify-token", authRequired, AuthController.verifyToken);
+
 export default router;

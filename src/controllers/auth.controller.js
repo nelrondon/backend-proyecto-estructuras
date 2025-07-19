@@ -1,7 +1,7 @@
 import { validateUser, validatePartialUser } from "../schemas/user.schema.js";
 import { UserModel } from "../models/auth.model.js";
 
-import { createAccessToken } from "../libs/jwt.js";
+import { createAccessToken, verifyToken } from "../libs/jwt.js";
 
 export class AuthController {
   static async get(req, res) {
@@ -34,9 +34,17 @@ export class AuthController {
     }
 
     try {
-      const token = await UserModel.login({ username, password });
+      const user = await UserModel.login({ username, password });
+      const token = await createAccessToken({ id: user.id });
       res.cookie("token", token);
-      res.status(200).json({ message: "Usuario Loggeado" });
+      res.status(200).json({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        last_login: user.last_login,
+      });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
@@ -71,5 +79,30 @@ export class AuthController {
   static logout(req, res) {
     res.cookie("token", "", { expires: new Date(0) });
     res.status(200).json({ message: "Usuario deslogueado" });
+  }
+
+  static async verifyToken(req, res) {
+    const { token } = req.cookies;
+    if (!token) {
+      return res.status(401).json({ message: "No hay token en la petición" });
+    }
+
+    try {
+      const { id } = await verifyToken(token);
+      const user = await UserModel.find(id);
+      if (!user) {
+        return res.status(401).json({ message: "Token inválido" });
+      }
+      return res.status(200).json({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        last_login: user.last_login,
+      });
+    } catch (e) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
   }
 }

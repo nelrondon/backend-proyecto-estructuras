@@ -12,3 +12,15 @@ export const createAccessToken = async (payload) => {
     });
   });
 };
+
+export const verifyToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, SECRET_KEY, (err, payload) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(payload);
+      }
+    });
+  });
+};
