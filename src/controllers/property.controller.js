@@ -61,11 +61,12 @@ export class PropertyController {
 
   static async register(req, res) {
     const result = validateProperty(req.body);
-
     if (!result.success) {
       const [message] = JSON.parse(result.error.message);
       return res.status(422).json({ error: message.message });
     }
+
+    console.log(req.user.id);
 
     const data = {
       ...req.body,

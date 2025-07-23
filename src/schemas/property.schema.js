@@ -54,17 +54,15 @@ const propertySchema = z.object({
     invalid_type_error: "El estado debe ser un texto",
     required_error: "El estado es requerida",
   }),
-  zip_code: z
-    .number({
-      invalid_type_error: "El codigo postal debe ser un número",
-    })
-    .min(4, "El codigo postal consta de +3 números"),
   price: z.number({
     invalid_type_error: "El precio debe ser un número",
     required_error: "El precio es requerido",
   }),
   bedrooms: z.number({
     invalid_type_error: "La cantidad de cuartos debe ser un número",
+  }),
+  parking_lots: z.number({
+    invalid_type_error: "La cantidad de estacionamientos debe ser un número",
   }),
   bathrooms: z.number({
     invalid_type_error: "La cantidad de baños debe ser un número",

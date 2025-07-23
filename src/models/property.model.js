@@ -74,23 +74,24 @@ export class PropiertyModel {
       address,
       city,
       state,
-      zip_code,
       price,
       bedrooms,
       bathrooms,
       square_feet,
+      parking_lots,
+      img_url,
       userId,
     } = data;
+    console.log(data.img_url);
 
     try {
       await db.execute(
-        `INSERT INTO properties (id, address, city, state, zip_code, price, bedrooms, bathrooms, square_feet, status, title, description, property_type, user_id)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO properties (id, address, city, state, price, bedrooms, bathrooms, square_feet, status, title, description, property_type, user_id, img_url, parking_lots)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           id,
           address,
           city,
           state,
-          zip_code,
           price,
           bedrooms,
           bathrooms,
@@ -100,10 +101,12 @@ export class PropiertyModel {
           description,
           property_type,
           userId,
+          img_url,
+          parking_lots,
         ]
       );
-      return true;
     } catch (e) {
+      console.log(e);
       throw new Error(`Error al registrar la Propiedad: ${e.message}`);
     }
   }

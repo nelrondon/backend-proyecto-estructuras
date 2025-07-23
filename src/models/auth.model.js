@@ -44,6 +44,7 @@ export class UserModel {
 
   static login = async (data) => {
     const { username, password } = data;
+    const last_login = new Date();
 
     const user = await db.execute(`SELECT * FROM users WHERE username = ?`, [
       username,
@@ -53,7 +54,7 @@ export class UserModel {
       throw new Error("Usuario no encontrado");
     }
 
-    const { id, name, email, phone, last_login } = user.rows[0];
+    const { id, name, email, phone } = user.rows[0];
 
     const isPasswordValid = await bcrypt.compare(
       password,
@@ -63,14 +64,14 @@ export class UserModel {
     if (!isPasswordValid) {
       throw new Error("Usuario o Contraseña incorrecta");
     }
-
     try {
       await db.execute({
-        sql: `UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?`,
-        args: [id],
+        sql: `UPDATE users SET last_login = ? WHERE id = ?`,
+        args: [id, last_login],
       });
-    } catch (error) {
-      throw new Error("Ha ocurrido un error");
+    } catch (e) {
+      console.log(e);
+      throw new Error("Error al actualizar el usuario");
     }
 
     return {
@@ -78,6 +79,7 @@ export class UserModel {
       name,
       email,
       phone,
+      username,
       last_login,
     };
   };
